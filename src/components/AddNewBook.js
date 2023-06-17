@@ -1,7 +1,7 @@
 import React from 'react';
 import './Book.css';
 
-function Book() {
+function AddNewBook() {
   return (
     <>
       <hr />
@@ -27,4 +27,4 @@ function Book() {
   );
 }
 
-export default Book;
+export default AddNewBook;

@@ -1,6 +1,7 @@
 import React from 'react';
 import './Book.css';
 import BookRecord from './BookRecord';
+import AddNewBook from './AddNewBook';
 
 function Book() {
   const books = [
@@ -40,23 +41,7 @@ function Book() {
         </div>
       </section>
       <hr />
-      <h2>ADD NEW BOOK</h2>
-      <form action="">
-        <div className="formcontrol">
-          <input
-            type="text"
-            className="input-text"
-            placeholder="Add title"
-            name="title"
-          />
-          <input
-            type="text"
-            className="input-text"
-            placeholder="Add author"
-            name="author"
-          />
-        </div>
-      </form>
+      <AddNewBook />
     </>
   );
 }
