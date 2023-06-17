@@ -20,6 +20,7 @@ function Book() {
             placeholder="Add author"
             name="author"
           />
+          <button type="button" className="addBtn">Add Book</button>
         </div>
       </form>
     </>
