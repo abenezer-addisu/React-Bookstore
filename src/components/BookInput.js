@@ -50,8 +50,10 @@ export default function BookInput() {
             name="category"
             className={`${styles.categorySelect} input`}
             value={book.category}
+            placeholder="category"
             onChange={handleChange}
           >
+            <option className={styles.placeholder} value="action">Catagories</option>
             <option value="action">action</option>
             <option value="science fiction">science fiction</option>
             <option value="economy">economy</option>

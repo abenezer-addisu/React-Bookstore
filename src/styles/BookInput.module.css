@@ -11,6 +11,13 @@
   margin-bottom: 1.188rem;
 }
 
+.placeholder {
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  color: #888;
+  font-weight: bold;
+}
+
 .form {
   gap: 2.125rem;
 }
