@@ -39,6 +39,7 @@
   font-size: 1rem;
   text-transform: capitalize;
   appearance: none;
+  background-color: rgb(255, 255, 255);
 }
 
 .caret {
