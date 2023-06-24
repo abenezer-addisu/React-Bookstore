@@ -1,32 +1,73 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { v4 as uuid } from 'uuid';
+import toast from 'react-hot-toast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { icon } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { postBook } from '../redux/books/booksSlice';
+import styles from '../styles/BookInput.module.css';
+import { getDummyAuthor } from '../dummies';
 
-export default function BookInput(props) {
-  const [title, setTitle] = useState('');
-  const { onSubmit } = props;
+export default function BookInput() {
+  const dispatch = useDispatch();
+  const [book, setBook] = useState({ title: '', author: 'action', category: '' });
+
   const addNewBook = (e) => {
     e.preventDefault();
-    if (title !== '') {
-      onSubmit(title);
-      setTitle('');
+    if (book.title !== '') {
+      toast.promise(dispatch(postBook({ item_id: uuid(), ...book })), {
+        loading: 'Posting...',
+        success: <b>Book saved!</b>,
+        error: <b>Could not save.</b>,
+      });
+      setBook({ title: '', author: '', category: 'action' });
     }
   };
 
   const handleChange = (e) => {
-    setTitle(e.target.value);
+    e.preventDefault();
+    setBook({
+      ...book,
+      author: getDummyAuthor(),
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
-    <>
-      <h3>Add a new book:</h3>
-      <form onSubmit={addNewBook}>
-        <input type="text" value={title} onChange={handleChange} />
-        <button type="submit">Add</button>
+    <div className={`${styles.container} d-flex direction-column`}>
+      <h3 className={styles.title}>Add new book:</h3>
+      <form className={`${styles.form} d-flex`} onSubmit={addNewBook}>
+        <input
+          className={`${styles.titleInput} input`}
+          type="text"
+          placeholder="Book title"
+          value={book.title}
+          name="title"
+          onChange={handleChange}
+        />
+        <div className={`${styles.selectContainer} d-flex`}>
+          <select
+            name="category"
+            className={`${styles.categorySelect} input`}
+            value={book.category}
+            placeholder="category"
+            onChange={handleChange}
+          >
+            <option className={styles.placeholder} value="action">Catagories</option>
+            <option value="action">action</option>
+            <option value="science fiction">science fiction</option>
+            <option value="economy">economy</option>
+          </select>
+          <FontAwesomeIcon
+            className={styles.caret}
+            icon={icon({ name: 'caret-down', style: 'solid' })}
+            size="xl"
+          />
+        </div>
+        <button className="btn-filled" type="submit">
+          Add book
+        </button>
       </form>
-    </>
+    </div>
   );
 }
-
-BookInput.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};

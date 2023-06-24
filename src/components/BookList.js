@@ -1,37 +1,55 @@
-import { useState } from 'react';
-import { v4 as uuid } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import BookItem from './BookItem';
 import BookInput from './BookInput';
+import { selectBooks } from '../redux/store';
+import { getBooks } from '../redux/books/booksSlice';
+import styles from '../styles/BookList.module.css';
 
 export default function BookList() {
-  const [books, setBooks] = useState([
-    { id: uuid(), title: 'Book #1' },
-    { id: uuid(), title: 'Book #2' },
-    { id: uuid(), title: 'Book #3' },
-  ]);
+  const {
+    bookItems, loading, error, errMsg,
+  } = useSelector(selectBooks);
+  const dispatch = useDispatch();
 
-  const deleteBook = (id) => {
-    setBooks((prevState) => prevState.filter((book) => book.id !== id));
-  };
+  useEffect(() => {
+    dispatch(getBooks());
+  }, [dispatch]);
 
-  const addBook = (bookTitle) => {
-    const newBook = { id: uuid(), title: bookTitle };
-    setBooks([...books, newBook]);
-  };
+  if (loading) {
+    return (
+      <div className={`${styles.info} container d-flex justify-center items-center`}>
+        <h3>Loading...</h3>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`${styles.info} container d-flex justify-center items-center`}>
+        <h3>An error occurred:</h3>
+        <pre>{errMsg}</pre>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <BookInput onSubmit={addBook} />
-      <h3>List of books:</h3>
-      <ul>
-        {books.map((book) => (
+    <div className="container">
+      <ul className={`${styles.bookList} d-flex direction-column`}>
+        {bookItems.map((book) => (
           <BookItem
             key={book.id}
-            bookTitle={book.title}
-            onDeleteClicked={() => deleteBook(book.id)}
+            id={book.id}
+            author={book.author}
+            category={book.category}
+            title={book.title}
+            progress={book.progress}
+            currentChapter={book.currentChapter}
           />
         ))}
       </ul>
+      <hr className={styles.separator} />
+      <BookInput />
     </div>
   );
 }
